@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户评过的电影</title>
+
+    <style>
+        h2{
+            text-align: center;
+            font-family: Georgia, serif;
+            font-weight: bold
+        }
+        li{
+            list-style: none;
+            text-align: center;
+            {#display: inline-block;#}
+        }
+    </style>
+</head>
+
+<body   style="background-color: rgba(33,43,92,0.29)">
+<srong><h2 style="background-color: rgba(25,32,98,0.36);color: #5a2c3b;font-size: 30px;">您评价过下列电影：</h2></srong>
+<br/>
+{% for dd in usermovietitle %}
+    <li>
+    <p>{{ dd }}</p>
+    </li>
+
+{%  endfor %}
+
+
+
+
+</body>
+</html>

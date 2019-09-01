@@ -1,0 +1,272 @@
+
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>推荐系统主页</title>
+		<link rel="stylesheet" href="{% static 'css/firstPage.css' %}" >
+{#        <link rel ="stylesheet" href="{% static 'css/main.css' %}">#}
+{#        <link rel ="stylesheet" href="{% static 'css/demo.css' %}">#}
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+
+        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+{#  <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>#}
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{#和分类标签排版有关#}
+        <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+{#        <script type="text/javascript" src="{% static 'js/starScore.js' %}"></script>#}
+
+        <script type="text/javascript" src="{% static 'js/jquery.raty.js' %}"></script>
+{#		<script type="text/javascript" src="js/Star.js" ></script>#}
+{#        <script type="text/javascript" src="{% static 'js/GetText.js' %}"></script>#}
+
+        <style>
+
+            #recommend1{
+                position:absolute;
+                left:700px;
+                background-color: #008CBA;
+                color: white;
+                padding: 5px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+        </style>
+
+	</head>
+
+	<body	style="background-color:#92B6D5">
+{#		<h2>电影分类</h2>#}
+
+
+
+{#<input type="hidden" id="grade" />#}
+
+
+<script type="text/javascript">
+    var flag=false;
+    var result;
+    $(function(){
+
+        $(".starts").raty({
+            number : 5,//星星个数
+
+
+            {#score :3,#}
+            path : '{% static 'img' %}',//图片路径
+            {#target : '#grade',//#}
+            {#hints : ['0.5','1','1.5','2','2.5','3','3.5','4','4.5','5'],#}
+            hints : ['不喜欢','不喜欢','一般','喜欢','推荐'],
+            starHalf:'star-half-big.png',
+            half:true,
+            round:{down:.26,full:.7,up:.9},
+            click : function(score, evt) {
+
+                if((score<0.5)) result = 0.5;
+                else if((score>0.51)&&(score<1.0)) result = 1.0;
+                else if((score>1.1)&&(score<1.5)) result = 1.5;
+                else if((score>1.5)&&(score<2)) result = 2.0;
+                else if((score>2.0)&&(score<2.5)) result = 2.5;
+                else if((score>2.5)&&(score<3.0)) result = 3.0;
+                else if((score>3.0)&&(score<3.5)) result = 3.5;
+                else if((score>3.5)&&(score<4.0)) result = 4.0;
+                else if((score>4.0)&&(score<4.5)) result = 4.5;
+                else  result = 5.0;
+
+                $("#rating").val(result.toFixed(1));
+                {#alert(result.toFixed(1));#}
+
+            }
+        });
+
+
+
+    });
+    $(document).ready(function(){
+    $(".starts").click(function(){
+        $("#imdbId").val(this.id);
+        $("#userId").val({{ user.id}});
+    {#alert(this.id);#}
+  });
+    $("#recommend1").click(function () {
+        $("#userId2").val({{ user.id}});
+
+    });
+    $("#recommend2").click(function () {
+        $("#userId3").val({{ user.id}});
+
+    });
+    $(".button80").click(function () {
+        $("#loveId").val(this.id);
+        $("#userId1").val({{ user.id}});
+    });
+
+        /*  $("#TI").click(function () {
+        if(result){
+            $(this).html("收藏")
+            alert("取消成功");
+            flag=false;
+
+        }else{
+            $(this).html("取消收藏")
+            alert("收藏成功");
+            flag=true;
+        }
+    })
+      */
+{#$("#103776").raty('set', { option: 3.0 });#}
+});
+
+    {#alert({{ user.id }})#}
+
+
+</script>
+<style>
+    .button80{
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding:10px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        -moz-border-radius: 30px;
+        -webkit-border-radius: 30px;
+    }
+    .button80:hover{
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+    .button80:active{
+        position: relative;
+        top:3px;
+    }
+</style>
+<div class="flex-center"	>
+    <div class="container_">
+        <div>
+            {% if user.is_authenticated %}
+                <div class = "login_">
+					<button class="btn btn-default"	style="background-color: rgba(203,14,0,0.12);font-size:10px;float:right"><a href="{% url 'logout' %}?next={{ request.path }}" style="color: white">注销登录</a></button>
+{#                 <p>您已登录，欢迎您：<a href="{% url 'check' %}">{{ user.username }}</a></p>#}
+                    <br>
+					<p	style="text-align:center;color:#6D492A;font-size: 30px;"><strong>您已登录，欢迎您：<a href="{% url 'users:showmessage' %}">{{ user.username }}</a></strong></p>
+{#                    <p>您的id号是：{{ user.id }}</p>#}
+                </div>
+
+
+
+            {% else %}
+                <p	style="text-align:center;color:#6D492A;font-size:25px;">您还没有登录，请
+                     &nbsp<button class="btn btn-default"style="background-color: #EA9A96;"><a href="{% url 'login' %}" style="color: #222222">登录</a></button>
+                     &nbsp或者 &nbsp
+                    <button class="btn btn-default"style="background-color:#A3D9D9;"><a href="{% url 'users:register' %}" style="color: #222222"> 注册</a></button>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+<br/>
+<div style="background-color: rgba(197,224,246,0.2)">
+    <form action="https://movie.douban.com/subject_search" method="get" style="text-align:center;font-size:20px">
+              <input id="inp-query" name="search_text" size="22" maxlength="60" placeholder="关键字搜索" value="" autocomplete="off">
+              <input type="submit" value="电影搜索" style="background-color:#ffb2b5;">
+      </form>
+
+   <form action="/insert" method="get" target="nm_iframe"	style="text-align:center;font-size:20px;">
+{#       movieId: <input type="text" name="movieId" id = "movieId"> <br>#}
+       <input type="hidden" name="userId" id = "userId"> <br>
+	   <input type="text" name="rating"  id = "rating"  value="评分" >
+       {#<input type="hidden" name="imdbId" id = "imdbId"> <br>#}
+	   <input type="hidden" name="imdbId"  id = "imdbId">
+       <input type="submit" value="提交评分"	style="background-color: #99CCCC;">
+   </form>
+   <br>
+    <form action="/islike" method="get"  target="nm_iframe" style="text-align:center;font-size:20px;">
+       <input type="hidden" name="userId1" id="userId1" class="form-group">
+       <input type="text" name="loveId" id="loveId" placeholder="收藏的电影编号">
+       <button type="submit" value="收藏" id="TI" style="background-color: rgba(204,159,130,0.27);">收藏</button>
+   </form>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+</div>
+<ul class="figures_lists">
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/laraofctuh3mh4q1512718044/220" alt="绣春刀·修罗战场">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/laraofctuh3mh4q.html" target="_blank" title="绣春刀·修罗战场">绣春刀·修罗战场</a>    <div class="evaluate"><div class="starts" id = "93"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/fzccp4z3j13ji641496631891/220" alt="恐怖电影院2">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/fzccp4z3j13ji64.html" target="_blank" title="恐怖电影院2">恐怖电影院2</a>    <div class="evaluate"><div class="starts" id = "223"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/mem7mc4cg4yledi1560220819/220" alt="张震讲故事之归宿">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/mem7mc4cg4yledi.html" target="_blank" title="张震讲故事之归宿">张震讲故事之归宿</a>    <div class="evaluate"><div class="starts" id = "273"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/277tehutk4lgn5z1539160780/220" alt="沿海出发">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/277tehutk4lgn5z.html" target="_blank" title="沿海出发">沿海出发</a>    <div class="evaluate"><div class="starts" id = "510"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/vien544t6p8saud1536311203/220" alt="暹罗决：九神战甲">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/vien544t6p8saud.html" target="_blank" title="暹罗决：九神战甲">暹罗决：九神战甲</a>    <div class="evaluate"><div class="starts" id = "527"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/is7os79rewv1iuk1560166900/220" alt="攻壳机动队">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/is7os79rewv1iuk.html" target="_blank" title="攻壳机动队">攻壳机动队</a>    <div class="evaluate"><div class="starts" id = "564"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/cjdhil2m0vy0g971560080024/220" alt="花芯">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/cjdhil2m0vy0g97.html" target="_blank" title="花芯">花芯</a>    <div class="evaluate"><div class="starts" id = "824"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/uz2f6oo2q18rxp41550536239/220" alt="狂暴凶狮">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/uz2f6oo2q18rxp4.html" target="_blank" title="狂暴凶狮">狂暴凶狮</a>    <div class="evaluate"><div class="starts" id = "1040"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/u17qs4rmoqxsq4x1555914145/220" alt="炸裂青春">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/u17qs4rmoqxsq4x.html" target="_blank" title="炸裂青春">炸裂青春</a>    <div class="evaluate"><div class="starts" id = "1219"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/dphd7gg56wn5ynz1525765627/220" alt="奔跑吧！兄弟">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/dphd7gg56wn5ynz.html" target="_blank" title="奔跑吧！兄弟">奔跑吧！兄弟</a>    <div class="evaluate"><div class="starts" id = "1315"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/2z2zpmtxsz8cima1554189950/220" alt="猪猪侠之终极决战">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/2z2zpmtxsz8cima.html" target="_blank" title="猪猪侠之终极决战">猪猪侠之终极决战</a>    <div class="evaluate"><div class="starts" id = "1368"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/ivt42cx7mubw9t51555051957/220" alt="穷乡僻壤">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/ivt42cx7mubw9t5.html" target="_blank" title="穷乡僻壤">穷乡僻壤</a>    <div class="evaluate"><div class="starts" id = "1521"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/0gounll2z5hvp091496213258/220" alt="傻哥的逆袭">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/0gounll2z5hvp09.html" target="_blank" title="傻哥的逆袭">傻哥的逆袭</a>    <div class="evaluate"><div class="starts" id = "1570"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/ykrlroes7qgu49f1487232372/220" alt="职场三国">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/ykrlroes7qgu49f.html" target="_blank" title="职场三国">职场三国</a>    <div class="evaluate"><div class="starts" id = "1613"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/d5zbox51fkyrzpp1499668025/220" alt="变脸女神">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/d5zbox51fkyrzpp.html" target="_blank" title="变脸女神">变脸女神</a>    <div class="evaluate"><div class="starts" id = "1693"></div></div>    </strong>    </li>
+<li class="list_item" data-trigger-class="list_item_hover">    <a _boss="film" href="" target="_blank" class="figure" tabindex="-1">    <img src="//puui.qpic.cn/vcover_vt_pic/0/13468zf8900rmfm1559827424/220" alt="前任攻略">    </a>    <strong class="figure_title">    <a _boss="film" href="https://v.qq.com/x/cover/13468zf8900rmfm.html" target="_blank" title="前任攻略">前任攻略</a>    <div class="evaluate"><div class="starts" id = "1897"></div></div>    </strong>    </li>
+</ul>
+<div	style="text-align: center">
+
+        <form action="users/switch/" method="get"">
+            {% csrf_token %}
+ {#          姓名：<input type="text" name="name">#}
+ {#              <hr/>#}
+            <input type="hidden" name="userIdd" id = "userId2">
+            <input type="submit" name = "viewResult" class="view" id = "recommend1" value="推荐结果"	style="background-color:#FFFF12;color:#6D492A;font-size:20px;">
+        </form>
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+<br/>
+<br/>
+<!--
+      <form action="users/recommend2/" method="get">
+	            {% csrf_token %}
+{#            姓名：<input type="text" name="name">#}
+             <hr/>
+             <input type="hidden" name="userIddd" id = "userId3">
+            <input type="submit" name = "viewResult" class="view"  id = "recommend2" value="推荐结果2"	style="background-color: rgba(40,153,114,0.2);color: #080808;font-size:20px;">
+        </form>
+		-->
+{#<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>#}
+{#<div class = "viewResult">#}
+ {#  <button type = "submit">查看推荐结果</button>#}
+{#</div>#}
+</div>
+<script>
+    var flag=false;
+    $(".button80").click(
+        function () {
+            if (flag){
+                $(this).html("收藏");
+                $(this).css("background-color","#4CAF50");
+                flag=false;
+                $("#TI").html($(this).text());
+            }else {
+                $(this).html("取消收藏");
+                //alert("收藏成功");
+                $(this).css("background-color","#ff0000");
+                flag=true;
+                $("#TI").html($(this).text());
+            }
+        }
+    )
+
+</script>
+	</body>
+</html>

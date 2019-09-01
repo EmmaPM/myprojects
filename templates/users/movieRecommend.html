@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推荐电影页面</title>
+	<style>
+		li{
+            list-style: none;
+            display: inline-block;
+        }
+	</style>
+</head>
+<body>
+<div style="background-color: #FFE070">
+<!-- <h1>和您喜欢的电影相似的有下列电影：</h1> -->
+<h1 style="text-align: center;background-color: #92B6D5">个性化电影推荐：</h1>
+{% for result in results %}
+    <li>
+        <p>{{ result.title }}</p>
+        <img src="{{ result.poster }}" alt="">
+    </li>
+
+{%  endfor %}
+<script>
+var url = document.location.toString();//获取url地址
+var urlParmStr = url.slice(url.indexOf('?')+1);//获取问号后所有的字符串
+var arr = urlParmStr.split('&');//通过&符号将字符串分割转成数组
+var userIdd=arr[1].split("=")[1];//第二个参数
+document.getElementById("userId3").value=userIdd;
+</script>
+</div>
+</body>
+</html>
